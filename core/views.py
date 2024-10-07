@@ -4,17 +4,32 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Profile, Post, LikePost, FollowersCount
+from itertools import chain
 
 # Create your views here.
 
 @login_required(login_url='signin')
 def index(request):
     # Where we can load the profile of the user in the home page(error with "Profile matching query does not exist)
-    # user_object = User.objects.get(username=request.user.username)
-    # user_profile = Profile.objects.get(user=user_object)
+    user_object = User.objects.get(username=request.user.username)
+    user_profile = Profile.objects.get(user=user_object)
+
+    user_following_list = []
+    feed = []
+
+    user_following = FollowersCount.objects.filter(follower=request.user.username)
+
+    for users in user_following:
+        user_following_list.append(users.user)
+
+    for usernames in user_following_list:
+        feed_lists = Post.objects.filter(user=usernames)
+        feed.append(feed_lists)
+
+    feed_list = list(chain(*feed))
 
     posts = Post.objects.all()
-    return render(request, 'index.html', {'posts': posts})
+    return render(request, 'index.html', {'posts': posts, 'user_profile': user_profile})
 # {'user_profile': user_profile}
 
 @login_required(login_url='signin')
@@ -33,27 +48,60 @@ def upload(request):
         return redirect('/')
 
 @login_required(login_url='signin')
-def like_post(request):
+def search(request):
+    user_object = User.objects.get(username=request.user.username)
+    user_profile = Profile.objects.get(user=user_object)
+
+    if request.method == 'POST':
+       username = request.POST['username']
+       username_object = User.objects.filter(username__icontains=username)
+
+
+       username_profile = []
+       username_profile_list = []
+
+       for users in username_object:
+           username_profile.append(users.id)
+
+       for ids in username_profile:
+           profile_list = Profile.objects.filter(id_user=ids)
+           username_profile_list.append(profile_list)
+
+       username_profile_list = list(chain(*username_profile_list))
+
+
+
+    return render(request, 'search.html', {'user_profile': user_profile, 'username_profile_list': username_profile_list} )
+
+# @login_required(login_url='signin')
+# def like_post(request):
     # NOT WORKING
     # core.models.Post.DoesNotExist: Post matching query does not exist.
-    username = request.user.username
-    post_id = request.GET.get('post_id')
-
-    post = Post.objects.get(id=post_id)
-
-    like_filter = LikePost.objects.filter(post_id=post_id, username=username).first
-
-    if like_filter == None:
-        new_like = LikePost.objects.create(post_id=post_id, username=username)
-        new_like.save()
-        post_no_likes = post.no_of_likes+1
-        post.save()
-        return redirect('/')
-    else:
-        like_filter.delete()
-        post.no_of_likes = post.no_of_like-1
-        post.save()
-        return redirect('/')
+    # username = request.user.username
+    # post_id = request.GET.get('post_id')
+    #
+    # post = Post.objects.get(id=post_id)
+    #
+    # like_filter = LikePost.objects.filter(post_id=post_id, username=username).exists()
+    # print(like_filter)
+    # if not like_filter:
+    #     print("test")
+    #     new_like = LikePost.objects.get_or_create(post_id=post_id, username=username)
+    #     # new_like.save()
+    #     print(post)
+    #     print(post.no_of_likes)
+    #     post.no_of_likes = post.no_of_likes+1
+    #     print(post.no_of_likes)
+    #
+    #     post.save()
+    #     return redirect('/')
+    # else:
+    #     print('wala')
+    #     # like_filter.delete
+    #     post.no_of_likes = post.no_of_likes-1
+    #     print(post.no_of_likes)
+    #     post.save()
+    #     return redirect('/')
 
 @login_required(login_url='signin')
 def profile(request, pk):
@@ -61,7 +109,7 @@ def profile(request, pk):
     user_profile = Profile.objects.get(user=user_object)
     user_posts = Post.objects.filter(user=pk)
     user_post_length = len(user_posts)
-    
+
 
 
     follower = request.user.username
@@ -76,9 +124,11 @@ def profile(request, pk):
     else:
         button_text = 'Follow'
 
-        user_followers = len(FollowersCount.objects.filter(user=pk))
-        user_following = len(FollowersCount.objects.filter(follower=pk))
-        
+        # this was what i added
+
+    user_followers = len(FollowersCount.objects.filter(user=pk))
+    user_following = len(FollowersCount.objects.filter(follower=pk))
+
     context = {
         'user_object': user_object,
         'user_profile': user_profile,
@@ -118,6 +168,7 @@ def settings(request):
             bio = request.POST['bio']
             location = request.POST['location']
 
+
             user_profile.profileimg = image
             user_profile.bio = bio
             user_profile.location = location
@@ -131,6 +182,39 @@ def settings(request):
             user_profile.bio = bio
             user_profile.location = location
             user_profile.save()
+
+        if request.method == 'POST':
+
+            if request.FILES.get('background') == None:
+                background = user_profile.backgroundimg
+
+                user_profile.backgroundimg = background
+
+                user_profile.save()
+            if request.FILES.get('background') != None:
+                background = request.FILES.get('background')
+
+                user_profile.backgroundimg = background
+
+                user_profile.save()
+
+
+        # if request.method == 'POST':
+        #
+        #     if request.FILES.get('music') == None:
+        #         music = user_profile.audio_file
+        #
+        #         user_profile.audio = music
+        #
+        #         user_profile.save()
+        #     if request.FILES.get('music') != None:
+        #         music = request.FILES.get('music')
+        #
+        #         user_profile.audio_file = music
+        #
+        #         user_profile.save()
+
+
 
         return redirect('settings')
     return render(request, 'setting.html', {'user_profile': user_profile})
