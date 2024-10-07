@@ -11,7 +11,7 @@ class Profile(models.Model):
     id_user = models.IntegerField()
     bio = models.TextField(blank=True)
     profileimg = models.ImageField(upload_to='profile_images', default='blank-profile-picture.png')
-    backgroundimg = models.ImageField(upload_to='back_images')
+    backgroundimg = models.ImageField(upload_to='back_images', default='blank-profile-picture.png')
     # audio_file = models.AudioField(upload_to='audios/')
     location = models.CharField(max_length=100, blank=True)
 
