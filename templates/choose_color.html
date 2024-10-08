@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pick Profile Color</title>
+</head>
+<body>
+    <h1>Pick Your Profile Color</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Color</button>
+    </form>
+</body>
+</html>

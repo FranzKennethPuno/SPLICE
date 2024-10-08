@@ -20,4 +20,6 @@ urlpatterns = [
     path('follow', views.follow, name='follow'),
 
     path('search', views.search, name='search'),
+
+    path('profile/color/', views.profile, name='choose_profile_color'),
 ]

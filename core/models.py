@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 import uuid
 from datetime import datetime
+from colorfield.fields import ColorField
 
 User = get_user_model()
 
@@ -12,8 +13,11 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     profileimg = models.ImageField(upload_to='profile_images', default='blank-profile-picture.png')
     backgroundimg = models.ImageField(upload_to='back_images', default='blank-profile-picture.png')
-    # audio_file = models.AudioField(upload_to='audios/')
+    audio_file = models.FileField(upload_to='audios/', default='blank-background-music.mp3')
+    audio_title = models.TextField(blank=True)
     location = models.CharField(max_length=100, blank=True)
+    color = ColorField(default='#FF0000')
+    bkg_color = ColorField(default='#FF0000')
 
     def __str__(self):
         return self.user.username

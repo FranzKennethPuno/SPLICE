@@ -29,7 +29,7 @@
                         <!-- Logo -->
                         <div id="logo" class=" uk-hidden@s">
                             <a href="home.html">
-                                <b><h1 style="text-transform: uppercase;">Social Book</h1></b>
+                                <b><h1 style="text-transform: uppercase;">SPLICE</h1></b>
                             </a>
                         </div>
 
@@ -106,7 +106,7 @@
                                         uk-toggle="target: .choose-upload ; animation: uk-animation-slide-left-small, uk-animation-slide-right-medium; queued: true">
                                         Or Upload Video </a>
                                 </div>
-    
+
                             </div>
                             <div class="px-4 py-3 -mx-5 -mb-4 mt-5 border-t text-sm">
                                 Your Image size Must be Maxmium 999MB
@@ -175,7 +175,7 @@
                         </a>
                         <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
                             <ul>
-                                <li><a href="/profile/{{users.user}}"><b>Your Profile :{{users.user}}</li>
+                                <li><a href="/profile/{{ user_profile.user.username }}"><b>Your Profile</li>
                                 <li><a href="/settings"> Account setting </a> </li>
                                 <li><a href="logout"> Log Out</a></li>
                             </ul>

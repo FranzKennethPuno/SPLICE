@@ -18,12 +18,12 @@
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
 
 </head>
-<body>
+<body style="background:{{ user_profile.bkg_color }}">
 <!--<div class="se-pre-con"></div>-->
-<div class="theme-layout">
-	
+<div style="color: {{ user_profile.color }}" class="theme-layout">
+
 	</div>
-	
+
 	<section>
 			<div class="feature-photo">
                 <style>
@@ -70,7 +70,7 @@
 					<a data-ripple=""><button type="submit" style="background-color: #ffc0cb; border: #ffc0cb;">{{ button_text }}</button></a>
                     {% endif %}
 
-					
+
 					</div>
 				</form>
 
@@ -81,10 +81,10 @@
 					<input type="file"/>
 					</label>
 				</form> -->
-				<div class="container-fluid">
+				<div style="background-color:{{user_profile.bkg_color}}" class="container-fluid">
 					<div class="row merged">
 						<div class="col-lg-2 col-sm-3">
-							<div class="user-avatar">
+							<div style="background-color:{{user_profile.bkg_color}}" class="user-avatar">
 								<figure>
 									<img src="{{user_profile.profileimg.url}}" style="height: 250px; width: 100%;" alt="">
 {#									<form class="edit-phto">#}
@@ -131,21 +131,32 @@
 				{{user_profile.bio}}
 			</div>
 		</section>
-		
+
+         <section style="background-color:{{user_profile.bkg_color}}">
+			<div class=" p-2 px-4 rounded bg-white-50 text-red-500" >
+				<strong style="font-size: large; text-decoration-color: black">{{ user_profile.audio_title }}</strong>
+			</div>
+            <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+                <audio style="margin: 25px;" controls autoplay loop>
+                    <source src="{{user_profile.audio_file.url }}">
+                </audio>
+            </div>
+		</section>
+
+
 	<section>
-		<div class="gap gray-bg">
+		<div style="background-color:{{user_profile.color}}"class="gap gray-bg">
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="row" id="page-contents">
 							<div class="col-lg-3">
 								<aside class="sidebar static">
-									
-									
-									
+
+
+
 								</aside>
 							</div><!-- sidebar -->
-							
 
 
 
@@ -155,7 +166,8 @@
 
 
 
-							<div class="col-lg-6">
+
+							<div style="background-color:{{user_profile.bkg_color}}" class="col-lg-6">
 								<div class="central-meta">
 									<ul class="photos">
 
@@ -166,30 +178,30 @@
 										</li>
                                         {% endfor %}
 
-										
-										
+
+
 									</ul>
 									<!--<div class="lodmore"><button class="btn-view btn-load-more"></button></div>-->
 								</div><!-- photos -->
 							</div><!-- centerl meta -->
 							<div class="col-lg-3">
 								<aside class="sidebar static">
-									
+
 								</aside>
 							</div><!-- sidebar -->
-						</div>	
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>	
+		</div>
 	</section>
 
-	
-	
+
+
 	<script data-cfasync="false" src="{% static '../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script><script src="{% static 'js/main.min.js' %}"></script>
 	<script src="{% static 'js/script.js' %}"></script>
 
-</body>	
+</body>
 
 
 </html>

@@ -199,24 +199,56 @@ def settings(request):
                 user_profile.save()
 
 
-        # if request.method == 'POST':
-        #
-        #     if request.FILES.get('music') == None:
-        #         music = user_profile.audio_file
-        #
-        #         user_profile.audio = music
-        #
-        #         user_profile.save()
-        #     if request.FILES.get('music') != None:
-        #         music = request.FILES.get('music')
-        #
-        #         user_profile.audio_file = music
-        #
-        #         user_profile.save()
+        if request.method == 'POST':
+
+            if request.FILES.get('music') == None:
+                music = user_profile.audio_file
 
 
+                user_profile.audio_file = music
 
-        return redirect('settings')
+
+                user_profile.save()
+            if request.FILES.get('music') != None:
+                music = request.FILES.get('music')
+                title = request.POST['title']
+
+                user_profile.audio_file = music
+                user_profile.audio_title = title
+
+                user_profile.save()
+
+            if request.method == 'POST':
+
+                if request.FILES.get('theme') == None:
+                    theme = request.POST['theme']
+
+
+                    user_profile.color = theme
+
+                    user_profile.save()
+                if request.FILES.get('theme') != None:
+                    theme = request.POST['theme']
+
+                    user_profile.color = theme
+
+                    user_profile.save()
+
+            if request.method == 'POST':
+
+                if request.FILES.get('accent') == None:
+                    accent = request.POST['accent']
+
+                    user_profile.bkg_color = accent
+
+                    user_profile.save()
+                if request.FILES.get('accent') != None:
+                    accent = request.POST['accent']
+
+                    user_profile.bkg_color = accent
+
+                    user_profile.save()
+
     return render(request, 'setting.html', {'user_profile': user_profile})
 
 def signup(request):

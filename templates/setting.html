@@ -13,17 +13,19 @@
     <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+    <style>
+        body {
+            background-color: {{ user_profile.color }} !important;
+        }
+    </style>
 
 </head>
 
-<body>
+<body class="bg-black">
 
 
-       
 
-          
-
-            <div class="container m-auto"> 
+            <div class="container m-auto">
 
                 <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3"><a href="/">Home </a>/ Account Setting for <b>{{ user.username }}</b></h1>
 
@@ -36,7 +38,7 @@
                     </div>
                     <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
 
-                    <form action="" method="POST" enctype="multipart/form-data" >
+                    <form action="" id="myForm" method="POST" enctype="multipart/form-data" >
                     {% csrf_token %}
                        <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
 
@@ -52,33 +54,83 @@
                            </style>
                             <div class="col-span-3">
                                 <label for=""> Background Image</label>
-                                <img max-width:100%; max-height:100%; src="{{user_profile.backgroundimg.url}}"/>
+                                <img style="max-width: 100%; max-height: 100%;" src="{{user_profile.backgroundimg.url}}"/>
                                 <input type="file" name="background"  value="" class="shadow-none bg-gray-100">
                             </div>
                            <div class="col-span-2">
                                 <label for=""> Audio</label>
-                                <source width="100" height="100" src="{{user_profile.backgroundimg.url}}"/>
+                                <source src="{{user_profile.audio_file.url }}">
                                 <input type="file" name="music"  value="" class="shadow-none bg-gray-100">
+                                <label for="title">Audio Title</label>
+                                <textarea id="title" name="title" rows="3"  class="shadow-none bg-gray-100">{{ user_profile.audio_title }}</textarea>
                             </div>
+
+                           <div class="col-span-2">
+                                <label for=""> Your Audio</label>
+                               	<strong style="font-size: large; text-decoration-color: black">{{ user_profile.audio_title }}</strong>
+                                    </div>
+                                    <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+                                            <audio controls loop>
+                                                <source src="{{user_profile.audio_file.url }}">
+                                            </audio>
+                                    </div>
+
+                             <div class="col-span-2">
+                                <label for=""> Color</label>
+                                <source src="{{user_profile.color.url }}">
+                                <input type="color" name="theme"  value="" class="shadow-none bg-gray-100">
+                            </div>
+
+                            <div style="background-color: {{user_profile.color}}" class="col-span-2">
+                                <label for=""> Your Color</label>
+                            </div>
+
+
+                            <div class="col-span-2">
+                                <label for=""> Accent</label>
+                                <source src="{{ user_profile.bkg_color.url }}">
+                                <input type="color" name="accent"  value="" class="shadow-none bg-gray-100">
+                            </div>
+
+                           <div style="background-color: {{user_profile.bkg_color}}" class="col-span-2">
+                                <label for=""> Your AccentColor</label>
+                            </div>
+
 
                             <div class="col-span-2">
                                 <label for="about">Bio</label>
                                 <textarea id="about" name="bio" rows="3"  class="shadow-none bg-gray-100">{{ user_profile.bio }}</textarea>
-                            </div> 
+                            </div>
+
                             <div class="col-span-2">
                                 <label for=""> Location</label>
                                 <input type="text" name="location" value="{{ user_profile.location}}" class="shadow-none bg-gray-100">
                             </div>
 
-                       </div> 
-    
-                       <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
-                           <button class="p-2 px-4 rounded bg-gray-50 text-red-500"><a href="/"> Cancel</a></button>
-                           <button type="submit" class="button bg-blue-700"> Save </button>
                        </div>
+
+                        <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+                           <button class="p-2 px-4 rounded bg-gray-50 text-red-500"><a href="/"> Cancel</a></button>
+                           <button type="submit" onclick="submitAndRedirect()" class="button bg-blue-700"> Save </button>
+                       </div>
+
                     </form>
 
+                        <script>
+                            function submitAndRedirect() {
+                                fetch('', {
+                                    method: 'POST',
+                                    body: new FormData(document.getElementById('myForm')),
+                                })
+                                .then(() => {
+                                    window.location.href = '/profile/{{ user }}';
+                                });
+                            }
+                        </script>
+        </div>
+
                     </div>
+
 
 
     
